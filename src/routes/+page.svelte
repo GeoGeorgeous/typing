@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { tweened } from 'svelte/motion';
   type Game = 'waiting for input' | 'in progress' | 'game over';
   type Word = string;
@@ -7,7 +8,7 @@
   let typedLetter = '';
   let seconds = 5;
 
-  let words = 'The quick brown fox jumps over a lazy dog'.split(' ');
+  let words: Word[] = [];
   let wordIndex = 0;
   let letterIndex = 0;
   let correctLetters = 0;
@@ -163,6 +164,15 @@
 
     if (game === 'waiting for input') startGame();
   }
+
+  async function getWords(limit: number) {
+    const response = await fetch(`/api/words?limit=${limit}`);
+    words = await response.json();
+  }
+
+  onMount(() => {
+    getWords(100);
+  });
 </script>
 
 {#if game !== 'game over'}

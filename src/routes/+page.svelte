@@ -36,6 +36,10 @@
     return Math.floor(correctLetters / word / minutes);
   }
 
+  function focusInput() {
+    inputEl.focus();
+  }
+
   function getAccuracy() {
     const totalLeters = getTotalLetters(words);
     return Math.floor((correctLetters / totalLeters) * 100);
@@ -51,7 +55,6 @@
   }
 
   // Reset
-
   function resetGame() {
     toggleReset = !toggleReset;
     setGameState('waiting for input');
@@ -177,6 +180,8 @@
   }
 
   function handleKeydown(event: KeyboardEvent) {
+    if (document.activeElement !== inputEl) focusInput();
+
     if (event.code === 'Space') {
       event.preventDefault();
       if (game === 'in progress') nextWord();
@@ -192,8 +197,11 @@
 
   onMount(() => {
     getWords(100);
+    focusInput();
   });
 </script>
+
+<svelte:window on:keydown={handleKeydown} />
 
 {#if game !== 'game over'}
   <div class="game" data-game={game}>
@@ -261,6 +269,9 @@
 <style lang="sass">
   .game
     position: relative
+    .input
+      position: absolute
+      opacity: 0
     .time
       position: absolute
       top: -48px

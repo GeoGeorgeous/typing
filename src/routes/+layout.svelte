@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-  <title>robo typing</title>
+  <title>typing</title>
 </svelte:head>
 
 <div class="layout">
@@ -11,7 +11,7 @@
   <main><slot /></main>
   <footer>
     <p>
-      built by <a href="https://github.com/GeoGeorgeous/typing">Geo</a
+      built by <a href="https://github.com/GeoGeorgeous/typing">geo</a
       >
     </p>
     <p>

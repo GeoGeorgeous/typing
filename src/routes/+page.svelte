@@ -4,6 +4,7 @@
 
   let game: Game = 'waiting for input';
   let typedLetter = '';
+  let seconds = 30;
 
   let words = 'The quick brown fox jumps over a lazy dog'.split(' ');
   let wordIndex = 0;
@@ -15,19 +16,34 @@
   let inputEl: HTMLInputElement;
   let caretEl: HTMLDivElement;
 
-  $: if (game === 'in progress') {
-    setLetter();
-    moveCaret();
-  }
-
   function setGameState(state: Game) {
     game = state;
   }
+
   function increaseScore() {
     correctLetters = correctLetters + 1;
   }
+
+  function setGameTimer() {
+    function gameTimer() {
+      if (seconds > 0) seconds = seconds - 1;
+
+      if (game === 'waiting for input' || seconds === 0) {
+        clearInterval(interval);
+      }
+
+      if (seconds === 0) {
+        setGameState('game over');
+        // getResults();
+      }
+    }
+
+    const interval = setInterval(gameTimer, 1000);
+  }
+
   function startGame() {
     setGameState('in progress');
+    setGameTimer();
   }
 
   function setLetter() {
@@ -129,6 +145,7 @@
     class="input"
     type="text"
   />
+  <div class="time">{seconds}</div>
 
   <div bind:this={wordsEl} class="words">
     {#each words as word}
@@ -143,6 +160,21 @@
 </div>
 
 <style lang="sass">
+  .game
+    position: relative
+    .time
+      position: absolute
+      top: -48px
+      font-size: 1.5rem
+      color: var(--primary)
+      opacity: 0
+      transition: all 0.3s ease
+    &[data-game="in progress"]
+      .time
+        opacity: 1
+
+
+
   .words
     --line-height: 1em
     --lines: 3
@@ -157,8 +189,7 @@
     line-height: var(--line-height)
     overflow: hidden
     user-select: none
-    .game
-      &[data-game="in progress"] .caret
+    .game[data-game="in progress"] .caret
         animation: none
 
   .caret

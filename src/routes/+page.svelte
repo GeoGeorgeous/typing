@@ -52,6 +52,17 @@
     }
   }
 
+  function nextWord() {
+    const isNotFirstLetter = letterIndex !== 0;
+    const isOneLetterWord = words[wordIndex].length === 1;
+
+    if (isNotFirstLetter || isOneLetterWord) {
+      wordIndex = wordIndex + 1;
+      letterIndex = 0;
+      increaseScore();
+    }
+  }
+
   function nextLetter() {
     letterIndex = letterIndex + 1;
   }
@@ -69,7 +80,10 @@
   }
 
   function handleKeydown(event: KeyboardEvent) {
-    if (event.code === 'Space') event.preventDefault();
+    if (event.code === 'Space') {
+      event.preventDefault();
+      if (game === 'in progress') nextWord();
+    }
 
     if (game === 'waiting for input') startGame();
   }
@@ -97,5 +111,29 @@
 </div>
 
 <style lang="sass">
-/* .. */
+  .words
+    --line-height: 1em
+    --lines: 3
+
+    width: 100%
+    max-height: calc(var(--line-height) * var(--lines) * 1.42)
+    display: flex
+    flex-wrap: wrap
+    gap: 0.6em
+    position: relative
+    font-size: 1.5rem
+    line-height: var(--line-height)
+    overflow: hidden
+    user-select: none
+
+  .letter
+    opacity: .4
+    transition: all 0.3s ease
+
+  :global(.letter[data-letter='correct'])
+    opacity: .8
+
+  :global(.letter[data-letter='incorrect'])
+    color: var(--primary)
+    opacity: 1
 </style>

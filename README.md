@@ -1,38 +1,25 @@
-# create-svelte
+# 🦾 Robo Typing
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+### About the project
 
-## Creating a project
+**[🦾 Robo Typing](https://typing-dusky-three.vercel.app/)** is a game that measures your typing speed similar to [Monkeytype](https://monkeytype.com/) and it's based on tutorial by [joyofcode](https://joyofcode.xyz/svelte-typing-game).
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Installation
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+```sh
+git clone https://github.com/GeoGeorgeous/typing.git typing && cd typing && npm i && npm run dev
 ```
 
-## Developing
+### Built With
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- SvelteKit
+- SASS
 
-```bash
-npm run dev
+### Roadmap
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- [ ] Break the code into components (you can use Svelte component events and I wrote a Svelte state management guide if you need help)
+- [ ] The input can lose focus if you press a random key, so make sure you keep track of the focus and improve that experience for the player
+- [ ] You can start a game on accident by pressing any key but you could use regex to make sure the input is a letter
+- [ ] Figure out how to edit previous letters for the current word by listening for the Backspace key and changing letterIndex
+- [x] The caret should animate when it moves to the next word and you can fix it by adding a space between words which would count towards the score, so you could remove the Space code
+- [ ] Many languages support

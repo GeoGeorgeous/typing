@@ -3,11 +3,11 @@
 </script>
 
 <svelte:head>
-  <title>typing</title>
+  <title>Robo Typing</title>
 </svelte:head>
 
 <div class="layout">
-  <nav><h1>🦾 robo typing</h1></nav>
+  <nav><h1>🦾 Robo Typing</h1></nav>
   <main><slot /></main>
   <footer>
     <p>

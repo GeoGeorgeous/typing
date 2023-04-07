@@ -1,9 +1,9 @@
-# 🦾 Robo Typing
-
 <p align="center" width="100%">
-    <a href="https://typing-dusky-three.vercel.app/"><img width="70%" src="./app.png"></a><br>
-       🚀 <a href="https://geogeorgeous.github.io/mesto/">View Live</a>
+    <a href="https://typing-dusky-three.vercel.app/"><img width="80%" src="./app.png"></a><br>
+       🚀 <a href="https://geogeorgeous.github.io/mesto/">See deployment</a>
 </p>
+
+# 🦾 Robo Typing
 
 ### About the project
 

@@ -17,6 +17,7 @@ git clone https://github.com/GeoGeorgeous/typing.git typing && cd typing && npm 
 
 - SvelteKit
 - SASS
+- TypeScript
 
 ### Roadmap
 

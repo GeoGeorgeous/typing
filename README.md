@@ -1,5 +1,10 @@
 # 🦾 Robo Typing
 
+<p align="center" width="100%">
+    <a href="https://typing-dusky-three.vercel.app/"><img width="70%" src="./app.png"></a><br>
+       🚀 <a href="https://geogeorgeous.github.io/mesto/">View Live</a>
+</p>
+
 ### About the project
 
 **[🦾 Robo Typing](https://typing-dusky-three.vercel.app/)** is a game that measures your typing speed similar to [Monkeytype](https://monkeytype.com/) and it's based on tutorial by [joyofcode](https://joyofcode.xyz/svelte-typing-game).

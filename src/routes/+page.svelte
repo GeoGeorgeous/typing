@@ -60,6 +60,7 @@
     if (isNotFirstLetter || isOneLetterWord) {
       wordIndex = wordIndex + 1;
       letterIndex = 0;
+      setLetter();
       increaseScore();
       moveCaret();
     }
@@ -86,7 +87,6 @@
 
   function moveCaret() {
     const offset = 4;
-    console.log(letterEl.offsetTop);
     caretEl.style.top = `${letterEl.offsetTop + offset}px`;
     caretEl.style.left = `${
       letterEl.offsetLeft + letterEl.offsetWidth

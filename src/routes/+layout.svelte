@@ -3,12 +3,23 @@
 </script>
 
 <svelte:head>
-  <title>Typing</title>
+  <title>robo typing</title>
 </svelte:head>
 
 <div class="layout">
-  <nav><h1>🔥 typing</h1></nav>
+  <nav><h1>🦾 robo typing</h1></nav>
   <main><slot /></main>
+  <footer>
+    <p>
+      built by <a href="https://github.com/GeoGeorgeous/typing">Geo</a
+      >
+    </p>
+    <p>
+      / inspired by <a href="https://joyofcode.xyz/svelte-typing-game"
+        >joyofcode tutorial</a
+      >
+    </p>
+  </footer>
 </div>
 
 <style lang="sass">
@@ -26,4 +37,13 @@
     align-items: center
     padding: 2rem
 
+  footer
+    opacity: .4
+    transition: all 0.3s ease
+    display: flex
+    gap: 1rem
+    &:hover
+      opacity: 1
+    a
+      color: var(--primary)
 </style>

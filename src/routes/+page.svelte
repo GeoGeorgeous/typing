@@ -13,6 +13,7 @@
   let wordsEl: HTMLDivElement;
   let letterEl: HTMLSpanElement;
   let inputEl: HTMLInputElement;
+  let caretEl: HTMLDivElement;
 
   function setGameState(state: Game) {
     game = state;
@@ -60,6 +61,7 @@
       wordIndex = wordIndex + 1;
       letterIndex = 0;
       increaseScore();
+      moveCaret();
     }
   }
 
@@ -82,12 +84,22 @@
     }
   }
 
+  function moveCaret() {
+    const offset = 4;
+    console.log(letterEl.offsetTop);
+    caretEl.style.top = `${letterEl.offsetTop + offset}px`;
+    caretEl.style.left = `${
+      letterEl.offsetLeft + letterEl.offsetWidth
+    }px`;
+  }
+
   function updateGameState() {
     setLetter();
     checkLetter();
     nextLetter();
     resetLetter();
     updateLine();
+    moveCaret();
   }
 
   function handleKeydown(event: KeyboardEvent) {
@@ -118,6 +130,7 @@
         {/each}
       </span>
     {/each}
+    <div bind:this={caretEl} class="caret" />
   </div>
 </div>
 
@@ -136,15 +149,34 @@
     line-height: var(--line-height)
     overflow: hidden
     user-select: none
+    .game
+      &[data-game="in progress"] .caret
+        animation: none
+
+  .caret
+      position: absolute
+      height: 1.8rem
+      top: 0
+      border-right: 1px solid var(--primary)
+      animation: caret 1s infinite
+      transition: all 0.2s ease
+
+      @keyframes caret
+        0%,
+        to
+          opacity: 0,
+        50%
+          opacity: 1
 
   .letter
     opacity: .4
     transition: all 0.3s ease
 
   :global(.letter[data-letter='correct'])
-    opacity: .8
+    opacity: .8 !important
 
   :global(.letter[data-letter='incorrect'])
     color: var(--primary)
-    opacity: 1
+    opacity: 1 !important
+
 </style>

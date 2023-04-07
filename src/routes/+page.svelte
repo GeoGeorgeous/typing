@@ -15,6 +15,11 @@
   let inputEl: HTMLInputElement;
   let caretEl: HTMLDivElement;
 
+  $: if (game === 'in progress') {
+    setLetter();
+    moveCaret();
+  }
+
   function setGameState(state: Game) {
     game = state;
   }
@@ -58,10 +63,10 @@
     const isOneLetterWord = words[wordIndex].length === 1;
 
     if (isNotFirstLetter || isOneLetterWord) {
-      wordIndex = wordIndex + 1;
+      wordIndex += 1;
       letterIndex = 0;
-      setLetter();
       increaseScore();
+      setLetter();
       moveCaret();
     }
   }
@@ -87,10 +92,13 @@
 
   function moveCaret() {
     const offset = 4;
-    caretEl.style.top = `${letterEl.offsetTop + offset}px`;
-    caretEl.style.left = `${
-      letterEl.offsetLeft + letterEl.offsetWidth
-    }px`;
+    let topShift = `${letterEl.offsetTop + offset}px`;
+    let leftShift =
+      letterIndex > 0
+        ? `${letterEl.offsetLeft + letterEl.offsetWidth}px`
+        : `${letterEl.offsetLeft}px`;
+    caretEl.style.top = topShift;
+    caretEl.style.left = leftShift;
   }
 
   function updateGameState() {

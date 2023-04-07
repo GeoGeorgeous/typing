@@ -1,10 +1,11 @@
 <script lang="ts">
+  import { tweened } from 'svelte/motion';
   type Game = 'waiting for input' | 'in progress' | 'game over';
   type Word = string;
 
   let game: Game = 'waiting for input';
   let typedLetter = '';
-  let seconds = 30;
+  let seconds = 5;
 
   let words = 'The quick brown fox jumps over a lazy dog'.split(' ');
   let wordIndex = 0;
@@ -15,6 +16,34 @@
   let letterEl: HTMLSpanElement;
   let inputEl: HTMLInputElement;
   let caretEl: HTMLDivElement;
+
+  // Results
+  let wordsPerMinute = tweened(0, { delay: 300, duration: 1000 });
+  let accuracy = tweened(0, { delay: 1300, duration: 1000 });
+
+  // https://www.speedtypingonline.com/typing-equations
+  // words per minute = (correct / 5) / time
+  // accuracy = (correct / total) * 100%
+
+  function getWordsPerMinute() {
+    const word = 5;
+    const minutes = 0.5;
+    return Math.floor(correctLetters / word / minutes);
+  }
+
+  function getAccuracy() {
+    const totalLeters = getTotalLetters(words);
+    return Math.floor((correctLetters / totalLeters) * 100);
+  }
+
+  function getTotalLetters(words: Word[]) {
+    return words.reduce((count, word) => count + word.length, 0);
+  }
+
+  function getResults() {
+    $wordsPerMinute = getWordsPerMinute();
+    $accuracy = getAccuracy();
+  }
 
   function setGameState(state: Game) {
     game = state;
@@ -34,7 +63,7 @@
 
       if (seconds === 0) {
         setGameState('game over');
-        // getResults();
+        getResults();
       }
     }
 
@@ -136,28 +165,44 @@
   }
 </script>
 
-<div class="game" data-game={game}>
-  <input
-    bind:this={inputEl}
-    bind:value={typedLetter}
-    on:input={updateGameState}
-    on:keydown={handleKeydown}
-    class="input"
-    type="text"
-  />
-  <div class="time">{seconds}</div>
+{#if game !== 'game over'}
+  <div class="game" data-game={game}>
+    <input
+      bind:this={inputEl}
+      bind:value={typedLetter}
+      on:input={updateGameState}
+      on:keydown={handleKeydown}
+      class="input"
+      type="text"
+    />
+    <div class="time">{seconds}</div>
 
-  <div bind:this={wordsEl} class="words">
-    {#each words as word}
-      <span class="word">
-        {#each word as letter}
-          <span class="letter">{letter}</span>
-        {/each}
-      </span>
-    {/each}
-    <div bind:this={caretEl} class="caret" />
+    <div bind:this={wordsEl} class="words">
+      {#each words as word}
+        <span class="word">
+          {#each word as letter}
+            <span class="letter">{letter}</span>
+          {/each}
+        </span>
+      {/each}
+      <div bind:this={caretEl} class="caret" />
+    </div>
   </div>
-</div>
+{/if}
+
+{#if game === 'game over'}
+  <div class="results">
+    <div>
+      <p class="title">wpm</p>
+      <p class="score">{Math.trunc($wordsPerMinute)}</p>
+    </div>
+
+    <div>
+      <p class="title">accuracy</p>
+      <p class="score">{Math.trunc($accuracy)}%</p>
+    </div>
+  </div>
+{/if}
 
 <style lang="sass">
   .game
@@ -172,8 +217,6 @@
     &[data-game="in progress"]
       .time
         opacity: 1
-
-
 
   .words
     --line-height: 1em
@@ -218,4 +261,15 @@
     color: var(--primary)
     opacity: 1 !important
 
+  .results
+    .title
+      font-size: 2rem
+      color: var(--fg-200)
+
+    .score
+      font-size: 4rem
+      color: var(--primary)
+
+    .play
+      margin-top: 1rem
 </style>

@@ -1,5 +1,35 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import '../styles/app.sass';
+
+  let darkMode = false;
+
+  function toggleTheme() {
+    darkMode = !darkMode;
+    localStorage.setItem('dark-mode', darkMode.toString());
+    applyTheme();
+  }
+
+  const isUserPrefersDark = () => {
+    return (
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    );
+  };
+
+  function applyTheme() {
+    const theme = darkMode ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  onMount(() => {
+    darkMode =
+      localStorage.getItem('dark-mode') === 'true' ||
+      isUserPrefersDark() ||
+      false;
+
+    applyTheme();
+  });
 </script>
 
 <svelte:head>
@@ -7,7 +37,12 @@
 </svelte:head>
 
 <div class="layout">
-  <nav><h1>🦾 Robo Typing</h1></nav>
+  <nav>
+    <h1>🦾 Robo Typing</h1>
+    <button class="theme-toggle" on:click={toggleTheme}
+      >Go {darkMode ? 'light' : 'dark'}</button
+    >
+  </nav>
   <main><slot /></main>
   <footer>
     <p>
@@ -29,6 +64,10 @@
     color: var(--fg-200)
     letter-spacing: 2px
 
+  nav
+    display: flex
+    flex-flow: row nowrap
+    justify-content: space-between
 
   .layout
     height: 100%
@@ -36,6 +75,11 @@
     grid-template-rows: auto 1fr
     align-items: center
     padding: 2rem
+
+  .theme-toggle
+    border-radius: 5px
+    padding: 0.4rem
+    border: 1px solid var(--fg-200)
 
   footer
     opacity: .4

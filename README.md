@@ -4,7 +4,7 @@
 
 <p align="center" width="100%">
     <a href="https://typing-dusky-three.vercel.app/"><img width="60%" src="./app.png"></a><br>
-       🚀 <a href="https://geogeorgeous.github.io/mesto/">See deployment</a>
+       🚀 <a href="https://typing-dusky-three.vercel.app/">See deployment</a>
 </p>
 
 ### Installation

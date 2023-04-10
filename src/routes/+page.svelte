@@ -37,7 +37,7 @@
   }
 
   function focusInput() {
-    inputEl.focus();
+    inputEl?.focus();
   }
 
   function getAccuracy() {

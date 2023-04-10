@@ -131,7 +131,7 @@
     const currentLetter =
       wordsEl.children[wordIndex].children[letterIndex];
 
-    if (letterEl?.dataset?.letter)
+    if (letterEl?.dataset.letter)
       currentLetter.removeAttribute('data-letter');
   }
 
@@ -149,7 +149,8 @@
   }
 
   function nextLetter() {
-    letterIndex = letterIndex + 1;
+    const lettersInWord = words[wordIndex].length;
+    if (letterIndex < lettersInWord) letterIndex = letterIndex + 1;
   }
 
   function previousLetter() {

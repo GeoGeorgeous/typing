@@ -23,6 +23,7 @@ git clone https://github.com/GeoGeorgeous/typing.git typing && cd typing && npm 
 
 - [x] The caret should animate when it moves to the next word
 - [x] User can start a game on accident by pressing any key - make sure the input is a letter
+- [x] Light / Dark themes
 - [ ] Break the code into components (you can use Svelte component events and I wrote a Svelte state management guide if you need help)
 - [ ] The input can lose focus if you press a random key, so make sure you keep track of the focus and improve that experience for the player
 - [ ] Figure out how to edit previous letters for the current word by listening for the Backspace key and changing letterIndex

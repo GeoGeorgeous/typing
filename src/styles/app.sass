@@ -8,11 +8,17 @@
   padding: 0
   box-sizing: border-box
 
-:root
-  --primary: tomato
-  --fg-100: hsl(220 20% 98%)
-  --fg-200: hsl(220 20% 80%)
-  --bg-100: hsl(220 20% 14%)
+:root[data-theme='dark']
+  --primary: aqua
+  --fg-100: hsl(220 10% 98%)
+  --fg-200: hsl(220 10% 80%)
+  --bg-100: hsl(220 10% 14%)
+
+:root[data-theme='light']
+  --primary: hsl(326 100% 35%)
+  --fg-100: hsl(220 10% 2%)
+  --fg-200: hsl(220 10% 20%)
+  --bg-100: hsl(220 10% 80%)
 
 html,
 body,

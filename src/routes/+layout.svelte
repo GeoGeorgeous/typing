@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import '../styles/app.sass';
+  import { loop_guard } from 'svelte/internal';
 
   let darkMode = true;
 
@@ -9,13 +10,6 @@
     localStorage.setItem('dark-mode', darkMode.toString());
     applyTheme();
   }
-
-  // const isUserPrefersDark = () => {
-  //   return (
-  //     window.matchMedia &&
-  //     window.matchMedia('(prefers-color-scheme: dark)').matches
-  //   );
-  // };
 
   function applyTheme() {
     const theme = darkMode ? 'dark' : 'light';
@@ -31,6 +25,11 @@
 
 <svelte:head>
   <title>Robo Typing</title>
+  <script>
+    const theme =
+      localStorage.getItem('dark-mode') === 'true' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+  </script>
 </svelte:head>
 
 <div class="layout">

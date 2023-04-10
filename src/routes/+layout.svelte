@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import '../styles/app.sass';
 
-  let darkMode = false;
+  let darkMode = true;
 
   function toggleTheme() {
     darkMode = !darkMode;
@@ -10,12 +10,12 @@
     applyTheme();
   }
 
-  const isUserPrefersDark = () => {
-    return (
-      window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches
-    );
-  };
+  // const isUserPrefersDark = () => {
+  //   return (
+  //     window.matchMedia &&
+  //     window.matchMedia('(prefers-color-scheme: dark)').matches
+  //   );
+  // };
 
   function applyTheme() {
     const theme = darkMode ? 'dark' : 'light';
@@ -23,10 +23,7 @@
   }
 
   onMount(() => {
-    darkMode =
-      localStorage.getItem('dark-mode') === 'true' ||
-      isUserPrefersDark() ||
-      false;
+    darkMode = localStorage.getItem('dark-mode') === 'true' || false;
 
     applyTheme();
   });

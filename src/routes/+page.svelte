@@ -103,7 +103,6 @@
   function setLetter() {
     // Before I set the letter I want to check if the word is done
     // by checking if the letterIndex is higher than the length of the word
-
     const isWordCompleted = letterIndex > words[wordIndex].length - 1;
     if (!isWordCompleted) {
       letterEl = wordsEl.children[wordIndex].children[
@@ -128,6 +127,14 @@
     }
   }
 
+  function uncheckLetter() {
+    const currentLetter =
+      wordsEl.children[wordIndex].children[letterIndex];
+
+    if (letterEl?.dataset?.letter)
+      currentLetter.removeAttribute('data-letter');
+  }
+
   function nextWord() {
     const isNotFirstLetter = letterIndex !== 0;
     const isOneLetterWord = words[wordIndex].length === 1;
@@ -137,7 +144,7 @@
       letterIndex = 0;
       increaseScore();
       setLetter();
-      moveCaret();
+      moveCaret('start');
     }
   }
 
@@ -145,8 +152,21 @@
     letterIndex = letterIndex + 1;
   }
 
+  function previousLetter() {
+    letterIndex = letterIndex - 1;
+  }
+
   function resetLetter() {
     typedLetter = '';
+  }
+
+  function goBackspace() {
+    const isFirstLetter = letterIndex === 0;
+    if (isFirstLetter) return;
+    previousLetter();
+    setLetter();
+    uncheckLetter();
+    moveCaret('start');
   }
 
   function updateLine() {
@@ -159,13 +179,15 @@
     }
   }
 
-  function moveCaret() {
+  function moveCaret(position: 'start' | 'end' = 'end') {
     const offset = 4;
     let topShift = `${letterEl.offsetTop + offset}px`;
-    let leftShift =
-      letterIndex > 0
-        ? `${letterEl.offsetLeft + letterEl.offsetWidth}px`
-        : `${letterEl.offsetLeft}px`;
+
+    let leftShift = `${letterEl.offsetLeft}px`;
+    if (position === 'end') {
+      leftShift = `${letterEl.offsetLeft + letterEl.offsetWidth}px`;
+    }
+
     caretEl.style.top = topShift;
     caretEl.style.left = leftShift;
   }
@@ -176,7 +198,7 @@
     nextLetter();
     resetLetter();
     updateLine();
-    moveCaret();
+    moveCaret('end');
   }
 
   function handleKeydown(event: KeyboardEvent) {
@@ -187,6 +209,10 @@
     if (event.code === 'Space') {
       event.preventDefault();
       if (game === 'in progress') nextWord();
+    }
+
+    if (event.code === 'Backspace') {
+      if (game === 'in progress') goBackspace();
     }
 
     if (game === 'waiting for input' && event.key.match(regex))
@@ -289,7 +315,6 @@
       display: grid
       justify-content: center
       margin-top: 2rem
-
 
   .words
     --line-height: 1em

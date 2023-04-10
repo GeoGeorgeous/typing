@@ -180,6 +180,8 @@
   }
 
   function handleKeydown(event: KeyboardEvent) {
+    const regex = /^[a-zA-Zа-яА-Я ]$/;
+
     if (document.activeElement !== inputEl) focusInput();
 
     if (event.code === 'Space') {
@@ -187,7 +189,8 @@
       if (game === 'in progress') nextWord();
     }
 
-    if (game === 'waiting for input') startGame();
+    if (game === 'waiting for input' && event.key.match(regex))
+      startGame();
   }
 
   async function getWords(limit: number) {
@@ -209,7 +212,6 @@
       bind:this={inputEl}
       bind:value={typedLetter}
       on:input={updateGameState}
-      on:keydown={handleKeydown}
       class="input"
       type="text"
     />

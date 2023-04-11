@@ -11,6 +11,7 @@
 
   let game: Game = 'waiting for input';
   let typedLetter = '';
+  let totalLeters = 0;
 
   let words: Word[] = [];
   let wordIndex = 0;
@@ -48,7 +49,7 @@
     // Count the last word even if the user has not finished it
     typedWords = words.slice(0, wordIndex);
 
-    const totalLeters = getTotalLetters(typedWords);
+    totalLeters = getTotalLetters(typedWords);
     return Math.floor((correctLetters / totalLeters) * 100);
   }
 
@@ -82,6 +83,7 @@
     wordIndex = 0;
     letterIndex = 0;
     correctLetters = 0;
+    totalLeters = 0;
 
     $wordsPerMinute = 0;
     $accuracy = 0;
@@ -315,9 +317,12 @@
     <div>
       <p class="title">accuracy</p>
       <p class="score">{Math.trunc($accuracy)}%</p>
-      <p class="correct">{correctLetters}</p>
+      <p class="correct">
+        <span>{correctLetters}</span> correct of
+        <span>{totalLeters}</span>
+      </p>
     </div>
-    <button on:click={resetGame} class="play">play again</button>
+    <button on:click={resetGame} class="play">Play again</button>
   </div>
 {/if}
 
@@ -388,6 +393,7 @@
 
   .results
     .title
+      border-top: 1pix sloid var(--fg-200)
       font-size: 2rem
       color: var(--fg-200)
 
@@ -396,9 +402,14 @@
       color: var(--primary)
 
     .correct
-      font-size: 2rem
+      font-size: 1rem
       color: var(--fg-200)
+      span
+        color: var(--primary)
 
     .play
-      margin-top: 1rem
+      border-radius: 5px
+      padding: 0.4rem
+      border: 1px solid var(--fg-200)
+      margin-top: 2rem
 </style>

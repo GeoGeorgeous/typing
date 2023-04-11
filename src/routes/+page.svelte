@@ -42,8 +42,9 @@
     inputEl?.focus();
   }
 
-  function getAccuracy() {
+  function getAccuracy(): number {
     let typedWords: Word[] = words.slice(0, wordIndex);
+    let accuracy = 0;
     const isWordTypingInProgress = letterIndex > 0;
 
     if (isWordTypingInProgress) wordIndex = wordIndex + 1;
@@ -51,19 +52,23 @@
     typedWords = words.slice(0, wordIndex);
 
     totalLeters = getTotalLetters(typedWords);
-    return Math.floor((correctLetters / totalLeters) * 100);
+
+    accuracy = Math.floor((correctLetters / totalLeters) * 100);
+    if (isNaN(accuracy)) accuracy = 0;
+    return accuracy;
   }
 
   function getTotalLetters(words: Word[]) {
     const lastWordLettersTyped = words.at(-1)?.slice(0, letterIndex);
 
-    if (lastWordLettersTyped)
+    if (lastWordLettersTyped) {
       // Count only part of the last word
       // if the user has not finished it
       return [...words.slice(0, -1), lastWordLettersTyped].reduce(
         (count, word) => count + word.length,
         0
       );
+    }
 
     return words.reduce((count, word) => count + word.length, 0);
   }
@@ -232,7 +237,7 @@
     moveCaret('end');
   }
 
-  function handleKeydown(event: KeyboardEvent) {
+  async function handleKeydown(event: KeyboardEvent) {
     const regex = /^[a-zA-Zа-яА-Я ]$/;
 
     if (event.code === 'Space') {
@@ -244,12 +249,10 @@
       if (game === 'in progress') goBackspace();
     }
 
-    if (game === 'waiting for input' && event.key.match(regex)) {
+    if (event.key.match(regex)) {
+      if (game === 'waiting for input') startGame();
       focusInput();
-      startGame();
     }
-
-    // if (document.activeElement !== inputEl) focusInput();
   }
 
   async function getWords(limit: number) {
@@ -348,6 +351,8 @@
       opacity: 0
       transition: all 0.3s ease
     &[data-game="in progress"]
+      .caret
+        animation: none
       .time
         opacity: 1
     .reset
@@ -370,14 +375,12 @@
     line-height: var(--line-height)
     overflow: hidden
     user-select: none
-    .game[data-game="in progress"] .caret
-        animation: none
 
   .caret
       position: absolute
       height: 1.8rem
       top: 0
-      border-right: 1px solid var(--primary)
+      border-right: 2px solid var(--primary)
       animation: caret 1s infinite
       transition: all 0.2s ease
 

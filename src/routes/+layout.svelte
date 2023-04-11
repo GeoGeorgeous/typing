@@ -34,20 +34,16 @@
 <div class="layout">
   <nav>
     <h1>🦾 Robo Typing</h1>
-    <button class="theme-toggle" on:click={toggleTheme}
-      >Go {darkMode ? 'light' : 'dark'}</button
+    <button class="theme-toggle" tabindex="0" on:click={toggleTheme}
+      >{darkMode ? 'Light' : 'Dark'}mode</button
     >
   </nav>
   <main><slot /></main>
   <footer>
+    <i class="ph-bold ph-bold ph-github-logo" />
     <p>
-      built by <a href="https://github.com/GeoGeorgeous/typing">geo</a
-      >
-    </p>
-    <p>
-      / inspired by <a href="https://joyofcode.xyz/svelte-typing-game"
-        >joyofcode tutorial</a
-      >
+      built by
+      <a href="https://github.com/GeoGeorgeous/typing">geo</a>
     </p>
   </footer>
 </div>
@@ -61,6 +57,7 @@
 
   nav
     display: flex
+    align-items: baseline
     flex-flow: row nowrap
     justify-content: space-between
 
@@ -75,15 +72,41 @@
     border-radius: 5px
     padding: 0.4rem
     border: 1px solid var(--fg-200)
+    max-width: max-content
+    &:hover
+      outline: 3px solid var(--primary)
 
   footer
-    opacity: .4
-    transition: all 0.3s ease
     display: flex
-    gap: 1rem
-    &:hover
-      opacity: 1
+    gap: .4rem
+    align-items: baseline
+    transition: opacity .3s ease
+    p
+      opacity: 0.4
+      &:has(a:focus, a:hover)
+        opacity: 1
+    &:has(a:focus, a:hover)
+      i
+        animation: flicker 5s linear infinite
     a
+      text-decoration: none
+      border-radius: 5px
+      padding:  0.4rem 0.1rem
       color: var(--primary)
+      &:focus
+        outline: 3px solid var(--primary)
+
+  i
+    color: var(--primary)
+
+  @keyframes flicker
+    0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100%
+      opacity: .99
+
+    20%, 21.999%, 63%, 63.999%, 65%, 69.999%
+      opacity: 0.4
+
+
+
 
 </style>

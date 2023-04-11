@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import '../styles/app.sass';
-  import { loop_guard } from 'svelte/internal';
 
   let darkMode = true;
 

@@ -6,7 +6,7 @@
   type Game = 'waiting for input' | 'in progress' | 'game over';
   type Word = string;
 
-  let seconds = 4;
+  let seconds = 30;
   let toggleReset = false;
 
   let game: Game = 'waiting for input';

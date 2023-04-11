@@ -232,7 +232,7 @@
     moveCaret('end');
   }
 
-  function handleKeydown(event: KeyboardEvent) {
+  async function handleKeydown(event: KeyboardEvent) {
     const regex = /^[a-zA-Zа-яА-Я ]$/;
 
     if (event.code === 'Space') {
@@ -244,12 +244,10 @@
       if (game === 'in progress') goBackspace();
     }
 
-    if (game === 'waiting for input' && event.key.match(regex)) {
+    if (event.key.match(regex)) {
+      if (game === 'waiting for input') startGame();
       focusInput();
-      startGame();
     }
-
-    // if (document.activeElement !== inputEl) focusInput();
   }
 
   async function getWords(limit: number) {

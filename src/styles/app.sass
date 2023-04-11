@@ -38,8 +38,14 @@ button
   background: none
   border: none
   opacity: 0.4
-  transition: all 0.3s ease
-
+  transition-duration: 0.3s
+  transition-timing-function: ease
+  transition-property: opacity, border, color
+  border-radius: 5px
+  padding: 0.4rem
+  &:focus
+    opacity: 1
+    outline: 3px solid var(--primary)
   &:hover
     cursor: pointer
     opacity: 1

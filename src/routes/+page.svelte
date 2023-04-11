@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { tweened } from 'svelte/motion';
   import { blur } from 'svelte/transition';
 
@@ -22,6 +22,7 @@
   let letterEl: HTMLSpanElement;
   let inputEl: HTMLInputElement;
   let caretEl: HTMLDivElement;
+  let playButtonEl: HTMLButtonElement;
 
   // Results
   let wordsPerMinute = tweened(0, { delay: 300, duration: 1000 });
@@ -102,7 +103,7 @@
   }
 
   function setGameTimer() {
-    function gameTimer() {
+    async function gameTimer() {
       if (seconds > 0) seconds = seconds - 1;
 
       if (game === 'waiting for input' || seconds === 0) {
@@ -112,6 +113,8 @@
       if (seconds === 0) {
         setGameState('game over');
         getResults();
+        await tick();
+        playButtonEl.focus();
       }
     }
 
@@ -265,6 +268,7 @@
 {#if game !== 'game over'}
   <div class="game" data-game={game}>
     <input
+      tabindex="-1"
       bind:this={inputEl}
       bind:value={typedLetter}
       on:input={updateGameState}
@@ -324,7 +328,9 @@
         <span>{totalLeters}</span>
       </p>
     </div>
-    <button on:click={resetGame} class="play">Play again</button>
+    <button on:click={resetGame} class="play" bind:this={playButtonEl}
+      >Play again</button
+    >
   </div>
 {/if}
 
@@ -410,8 +416,6 @@
         color: var(--primary)
 
     .play
-      border-radius: 5px
-      padding: 0.4rem
       border: 1px solid var(--fg-200)
       margin-top: 2rem
 </style>

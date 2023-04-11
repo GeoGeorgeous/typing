@@ -41,11 +41,28 @@
   }
 
   function getAccuracy() {
-    const totalLeters = getTotalLetters(words);
+    let typedWords: Word[] = words.slice(0, wordIndex);
+    const isWordTypingInProgress = letterIndex > 0;
+
+    if (isWordTypingInProgress) wordIndex = wordIndex + 1;
+    // Count the last word even if the user has not finished it
+    typedWords = words.slice(0, wordIndex);
+
+    const totalLeters = getTotalLetters(typedWords);
     return Math.floor((correctLetters / totalLeters) * 100);
   }
 
   function getTotalLetters(words: Word[]) {
+    const lastWordLettersTyped = words.at(-1)?.slice(0, letterIndex);
+
+    if (lastWordLettersTyped)
+      // Count only part of the last word
+      // if the user has not finished it
+      return [...words.slice(0, -1), lastWordLettersTyped].reduce(
+        (count, word) => count + word.length,
+        0
+      );
+
     return words.reduce((count, word) => count + word.length, 0);
   }
 
@@ -76,6 +93,10 @@
 
   function increaseScore() {
     correctLetters = correctLetters + 1;
+  }
+
+  function decreaseScore() {
+    correctLetters = correctLetters - 1;
   }
 
   function setGameTimer() {
@@ -131,8 +152,11 @@
     const currentLetter =
       wordsEl.children[wordIndex].children[letterIndex];
 
-    if (letterEl?.dataset.letter)
-      currentLetter.removeAttribute('data-letter');
+    if (letterEl?.dataset.letter) {
+      // if user removes the correct letter also decrease the score
+      if (letterEl.dataset.letter === 'correct') decreaseScore();
+    }
+    currentLetter.removeAttribute('data-letter');
   }
 
   function nextWord() {
@@ -142,7 +166,8 @@
     if (isNotFirstLetter || isOneLetterWord) {
       wordIndex += 1;
       letterIndex = 0;
-      increaseScore();
+      // Don't count spaces for now
+      // increaseScore();
       setLetter();
       moveCaret('start');
     }
@@ -290,6 +315,7 @@
     <div>
       <p class="title">accuracy</p>
       <p class="score">{Math.trunc($accuracy)}%</p>
+      <p class="correct">{correctLetters}</p>
     </div>
     <button on:click={resetGame} class="play">play again</button>
   </div>
@@ -368,6 +394,10 @@
     .score
       font-size: 4rem
       color: var(--primary)
+
+    .correct
+      font-size: 2rem
+      color: var(--fg-200)
 
     .play
       margin-top: 1rem

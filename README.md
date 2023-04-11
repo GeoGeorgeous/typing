@@ -1,6 +1,6 @@
 # 🦾 Robo Typing
 
-**[🦾 Robo Typing](https://typing-dusky-three.vercel.app/)** is a game that measures your typing speed similar to **[Monkeytype](https://monkeytype.com/)** and it's based on tutorial by **[joyofcode](https://joyofcode.xyz/svelte-typing-game)** (**[@mattcroat](https://github.com/mattcroat)**).
+> **[Robo Typing](https://typing-dusky-three.vercel.app/)** is a game that measures your typing speed similar to **[Monkeytype](https://monkeytype.com/)** and it's based on tutorial by **[joyofcode](https://joyofcode.xyz/svelte-typing-game)** (**[@mattcroat](https://github.com/mattcroat)**).
 
 <p align="center" width="100%">
     <a href="https://typing-dusky-three.vercel.app/"><img width="60%" src="./app.png"></a><br>
@@ -15,9 +15,9 @@ git clone https://github.com/GeoGeorgeous/typing.git typing && cd typing && npm 
 
 ### Built With
 
-- SvelteKit
-- SASS
-- TypeScript
+- `SvelteKit`
+- `SASS`
+- `TypeScript`
 
 ### Todos:
 

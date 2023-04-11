@@ -35,7 +35,7 @@
   <nav>
     <h1>🦾 Robo Typing</h1>
     <button class="theme-toggle" tabindex="0" on:click={toggleTheme}
-      >Go {darkMode ? 'light' : 'dark'}</button
+      >{darkMode ? 'Light' : 'Dark'}mode</button
     >
   </nav>
   <main><slot /></main>
@@ -89,6 +89,7 @@
       i
         animation: flicker 5s linear infinite
     a
+      text-decoration: none
       border-radius: 5px
       padding:  0.4rem 0.1rem
       color: var(--primary)

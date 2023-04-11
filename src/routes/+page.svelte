@@ -232,8 +232,6 @@
   function handleKeydown(event: KeyboardEvent) {
     const regex = /^[a-zA-Zа-яА-Я ]$/;
 
-    if (document.activeElement !== inputEl) focusInput();
-
     if (event.code === 'Space') {
       event.preventDefault();
       if (game === 'in progress') nextWord();
@@ -243,8 +241,12 @@
       if (game === 'in progress') goBackspace();
     }
 
-    if (game === 'waiting for input' && event.key.match(regex))
+    if (game === 'waiting for input' && event.key.match(regex)) {
+      focusInput();
       startGame();
+    }
+
+    // if (document.activeElement !== inputEl) focusInput();
   }
 
   async function getWords(limit: number) {

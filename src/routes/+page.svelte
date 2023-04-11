@@ -351,6 +351,8 @@
       opacity: 0
       transition: all 0.3s ease
     &[data-game="in progress"]
+      .caret
+        animation: none
       .time
         opacity: 1
     .reset
@@ -373,8 +375,6 @@
     line-height: var(--line-height)
     overflow: hidden
     user-select: none
-    &[data-game="in progress"] .caret
-      animation: none
 
   .caret
       position: absolute

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
   import { tweened } from 'svelte/motion';
   import { blur } from 'svelte/transition';
 
@@ -11,6 +11,7 @@
 
   let game: Game = 'waiting for input';
   let typedLetter = '';
+  let totalLeters = 0;
 
   let words: Word[] = [];
   let wordIndex = 0;
@@ -21,6 +22,7 @@
   let letterEl: HTMLSpanElement;
   let inputEl: HTMLInputElement;
   let caretEl: HTMLDivElement;
+  let playButtonEl: HTMLButtonElement;
 
   // Results
   let wordsPerMinute = tweened(0, { delay: 300, duration: 1000 });
@@ -41,11 +43,28 @@
   }
 
   function getAccuracy() {
-    const totalLeters = getTotalLetters(words);
+    let typedWords: Word[] = words.slice(0, wordIndex);
+    const isWordTypingInProgress = letterIndex > 0;
+
+    if (isWordTypingInProgress) wordIndex = wordIndex + 1;
+    // Count the last word even if the user has not finished it
+    typedWords = words.slice(0, wordIndex);
+
+    totalLeters = getTotalLetters(typedWords);
     return Math.floor((correctLetters / totalLeters) * 100);
   }
 
   function getTotalLetters(words: Word[]) {
+    const lastWordLettersTyped = words.at(-1)?.slice(0, letterIndex);
+
+    if (lastWordLettersTyped)
+      // Count only part of the last word
+      // if the user has not finished it
+      return [...words.slice(0, -1), lastWordLettersTyped].reduce(
+        (count, word) => count + word.length,
+        0
+      );
+
     return words.reduce((count, word) => count + word.length, 0);
   }
 
@@ -65,6 +84,7 @@
     wordIndex = 0;
     letterIndex = 0;
     correctLetters = 0;
+    totalLeters = 0;
 
     $wordsPerMinute = 0;
     $accuracy = 0;
@@ -78,8 +98,12 @@
     correctLetters = correctLetters + 1;
   }
 
+  function decreaseScore() {
+    correctLetters = correctLetters - 1;
+  }
+
   function setGameTimer() {
-    function gameTimer() {
+    async function gameTimer() {
       if (seconds > 0) seconds = seconds - 1;
 
       if (game === 'waiting for input' || seconds === 0) {
@@ -89,6 +113,8 @@
       if (seconds === 0) {
         setGameState('game over');
         getResults();
+        await tick();
+        playButtonEl.focus();
       }
     }
 
@@ -131,8 +157,11 @@
     const currentLetter =
       wordsEl.children[wordIndex].children[letterIndex];
 
-    if (letterEl?.dataset.letter)
-      currentLetter.removeAttribute('data-letter');
+    if (letterEl?.dataset.letter) {
+      // if user removes the correct letter also decrease the score
+      if (letterEl.dataset.letter === 'correct') decreaseScore();
+    }
+    currentLetter.removeAttribute('data-letter');
   }
 
   function nextWord() {
@@ -142,7 +171,8 @@
     if (isNotFirstLetter || isOneLetterWord) {
       wordIndex += 1;
       letterIndex = 0;
-      increaseScore();
+      // Don't count spaces for now
+      // increaseScore();
       setLetter();
       moveCaret('start');
     }
@@ -205,8 +235,6 @@
   function handleKeydown(event: KeyboardEvent) {
     const regex = /^[a-zA-Zа-яА-Я ]$/;
 
-    if (document.activeElement !== inputEl) focusInput();
-
     if (event.code === 'Space') {
       event.preventDefault();
       if (game === 'in progress') nextWord();
@@ -216,8 +244,12 @@
       if (game === 'in progress') goBackspace();
     }
 
-    if (game === 'waiting for input' && event.key.match(regex))
+    if (game === 'waiting for input' && event.key.match(regex)) {
+      focusInput();
       startGame();
+    }
+
+    // if (document.activeElement !== inputEl) focusInput();
   }
 
   async function getWords(limit: number) {
@@ -236,6 +268,7 @@
 {#if game !== 'game over'}
   <div class="game" data-game={game}>
     <input
+      tabindex="-1"
       bind:this={inputEl}
       bind:value={typedLetter}
       on:input={updateGameState}
@@ -290,8 +323,14 @@
     <div>
       <p class="title">accuracy</p>
       <p class="score">{Math.trunc($accuracy)}%</p>
+      <p class="correct">
+        <span>{correctLetters}</span> correct of
+        <span>{totalLeters}</span>
+      </p>
     </div>
-    <button on:click={resetGame} class="play">play again</button>
+    <button on:click={resetGame} class="play" bind:this={playButtonEl}
+      >Play again</button
+    >
   </div>
 {/if}
 
@@ -362,6 +401,7 @@
 
   .results
     .title
+      border-top: 1pix sloid var(--fg-200)
       font-size: 2rem
       color: var(--fg-200)
 
@@ -369,6 +409,13 @@
       font-size: 4rem
       color: var(--primary)
 
+    .correct
+      font-size: 1rem
+      color: var(--fg-200)
+      span
+        color: var(--primary)
+
     .play
-      margin-top: 1rem
+      border: 1px solid var(--fg-200)
+      margin-top: 2rem
 </style>
